@@ -1,6 +1,7 @@
 /* Course Board - screens. Logic lives in engine.js and voice.js. */
 (function () {
   'use strict';
+  var APP_NAME = 'Range Caller';
   var E = window.Engine, V = window.Voice || {};
   var C = { paper: '#FFFFFF', ink: '#111111', green: '#0B6B3A', greenD: '#07502B', tint: '#E3F0E7', yellow: '#FFD21F', yellowD: '#D9A400', pale: '#FFF1B8', miss: '#E4572E', missTint: '#FAD9CF', g1: '#8A9099', g2: '#C9CDD2', g3: '#E6E8EB' };
   var NUMF = 'font-family="Barlow Condensed, Arial Narrow, sans-serif"';
@@ -170,6 +171,10 @@
     return '<svg class="logo" viewBox="0 0 200 120" width="' + size + '" height="' + Math.round(size * .6) + '" aria-hidden="true" focusable="false">' + logoInner(size < 64) + '</svg>';
   }
 
+  function lockup(size, cls) {
+    return '<div class="lockup' + (cls ? ' ' + cls : '') + '">' + drawLogo(size) + '<span class="wordmark">' + esc(APP_NAME) + '</span></div>';
+  }
+
   /* turf: a 14px green band with white tick marks inside and numerals below */
   function drawTurf(x0, x1, base, ticks, labels) {
     var s = '<rect x="' + x0 + '" y="' + base + '" width="' + (x1 - x0) + '" height="14" fill="' + C.green + '"/><rect x="' + x0 + '" y="' + (base + 11) + '" width="' + (x1 - x0) + '" height="3" fill="' + C.greenD + '"/>';
@@ -301,8 +306,8 @@
       '<div class="headline"><span class="num headline-num' + roll() + '">' + pm(avg) + '</span><span class="unit">' + unit() + '</span></div>';
     var chips = '<button type="button" class="tag' + (cfg.mode === 'bag' ? ' sel' : '') + '" data-act="pickclub" data-club="all" aria-pressed="' + (cfg.mode === 'bag') + '" aria-label="Whole bag">' + ic('bars', 28) + '</button>' +
       onClubs().map(function (c) { return tagBtn(c, 'pickclub', cfg.mode === 'club' && cfg.clubId === c.id); }).join('');
-    return '<div class="group"><div class="logowrap">' + drawLogo(170) + '</div><div class="headblock">' + head + sparkline(tr.slice(-12), 150, 48) + '</div>' +
-      '<div class="chips" role="group" aria-label="Club">' + chips + '</div>' +
+    return '<div class="group">' + lockup(96) + '<div class="headblock">' + head + sparkline(tr.slice(-12), 150, 48) + '</div>' +
+      '<div class="chips play" role="group" aria-label="Club">' + chips + '</div>' +
       cbtn('start', 'pin', 'Start', { primary: true, size: 44 }) + '</div>';
   }
 
@@ -556,7 +561,7 @@
     var W = 342, base = 36, ticks = [], x;
     for (var k = 0; k <= 27; k++) { x = 12 + k * 11.5; ticks.push({ x: x, tall: k % 2 === 0 }); }
     var deco = '<svg class="ruler" viewBox="0 0 ' + W + ' 60" aria-hidden="true">' + drawTurf(0, W, base, ticks, []) + drawFlag(W / 2, base, 34) + '</svg>';
-    return '<div class="logowrap sm">' + drawLogo(120) + '</div><div class="pagehead center-head"><span class="title">Your 7 iron</span></div>' +
+    return lockup(80, 'sm') + '<div class="pagehead center-head"><span class="title">Your 7 iron</span></div>' +
       '<div class="sevenmid"><span class="tag ring big">7i</span><div class="stepper">' + stepper(null, 'seven', 'num seven-num') + '</div><span class="unit" style="margin:0">' + unit() + '</span></div>' +
       '<div class="ruler-wrap">' + deco + '</div>' +
       '<div class="bottom">' + cbtn('sevendone', 'check', 'Done', { primary: true, size: 40 }) + '</div>';
@@ -663,8 +668,6 @@
     bl = bsc && $('.bagl'); if (bl) bl.scrollTop = bsc;
     renderTabbar(); renderSheet();
     if (!keepScroll) fadeIn(root);
-    var ch = $('#entryChips'), sel = ch && $('.sel', ch);
-    if (sel) ch.scrollLeft = sel.offsetLeft - (ch.clientWidth - sel.offsetWidth) / 2;
     var rs = $('#resultRuler .ruler'); if (rs && name === 'result') slideIn(rs);
   }
   function go(screen, tab) { ui.screen = screen; if (tab) ui.tab = tab; ui.roll = true; clearTimeout(timers.result); render(); }
