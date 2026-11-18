@@ -1,7 +1,7 @@
 /* Course Board - screens. Logic lives in engine.js and voice.js. */
 (function () {
   'use strict';
-  var APP_NAME = 'Range Caller';
+  var APP_NAME = 'Hit the Number';
   var E = window.Engine, V = window.Voice || {};
   var C = { paper: '#FFFFFF', ink: '#111111', green: '#0B6B3A', greenD: '#07502B', tint: '#E3F0E7', yellow: '#FFD21F', yellowD: '#D9A400', pale: '#FFF1B8', miss: '#E4572E', missTint: '#FAD9CF', g1: '#8A9099', g2: '#C9CDD2', g3: '#E6E8EB' };
   var NUMF = 'font-family="Barlow Condensed, Arial Narrow, sans-serif"';
